@@ -11,13 +11,14 @@ ig.module(
 
 	EntityHex = ig.Entity.extend({
 
-		sides: 5,
+		sides: 6,
 		radius: null,
 
 		init: function( x, y, settings ) {
 			this.parent( x, y, settings );
+			this.pos.x = x;
+			this.pos.y = y;
 			this.radius = settings.radius;
-			ig.game.hex = this;
 		},
 
 		update: function() {
@@ -26,8 +27,11 @@ ig.module(
 		},
 
 		draw: function() {
-			var sides = this.sides, x = this.pos.x, y= this.pos.y, radius = this.radius;
+			this.parent();
 
+			var sides = this.sides, x = this.pos.x, y = this.pos.y, radius = this.radius;
+			ig.system.context.save();
+			ig.system.context.fillStyle = "rgb(0,0,0)";
 			ig.system.context.beginPath();
 			var a = ((Math.PI * 2) / sides);
 			ig.system.context.translate(x, y);
@@ -36,8 +40,9 @@ ig.module(
 				ig.system.context.lineTo(radius * Math.cos(a * i), radius * Math.sin(a * i));
 			}
 			ig.system.context.closePath();
-			ig.system.context.fillStyle = "rgb(0,0,0)";
 			ig.system.context.fill();
+			ig.system.context.restore();
+
 		}
 
 	});

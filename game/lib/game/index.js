@@ -20,12 +20,12 @@ ig.module(
 		init: function() {
 
 			var grid = new Grid();
-			grid.tileSize    = 50;
-			grid.tileSpacing = 0;
+			grid.tileSize = 50;
+			grid.tileSpacing = 2;
 			grid.pointyTiles = false;
 			grid.withOrigin  = true;
 
-			var coordinates = grid.hexagonCoordinates(0, 0, 1)
+			var coordinates = grid.hexagonCoordinates(0, 0, 5)
 
 			this.loadLevel( LevelGameLevel );
 
@@ -33,7 +33,6 @@ ig.module(
 				var q = coordinates[i].q;
 				var r = coordinates[i].r;
 				var center = grid.getCenterXY(q, r);
-				console.log(q,r,center.x + WIDTH / 2, center.y + height / 2);
 				this.spawnEntity(EntityHex, center.x + WIDTH / 2, center.y + height / 2, {radius: grid.tileSize});
 			}
 
