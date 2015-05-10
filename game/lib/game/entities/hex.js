@@ -13,12 +13,15 @@ ig.module(
 
 		sides: 6,
 		radius: null,
+		q: null,
+		r: null,
+		selected: false,
 
 		init: function( x, y, settings ) {
 			this.parent( x, y, settings );
-			this.pos.x = x;
-			this.pos.y = y;
 			this.radius = settings.radius;
+			this.q = settings.q;
+			this.r = settings.r;
 		},
 
 		update: function() {
@@ -31,7 +34,13 @@ ig.module(
 
 			var sides = this.sides, x = this.pos.x, y = this.pos.y, radius = this.radius;
 			ig.system.context.save();
-			ig.system.context.fillStyle = "rgb(0,0,0)";
+
+			if (this.selected) {
+				ig.system.context.fillStyle = "#DAE3E9";
+			} else {
+				ig.system.context.fillStyle = "#000000";
+			}
+
 			ig.system.context.beginPath();
 			var a = ((Math.PI * 2) / sides);
 			ig.system.context.translate(x, y);

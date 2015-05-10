@@ -12,6 +12,7 @@ ig.module(
 
 	var WIDTH = window.innerWidth;
 	var HEIGHT = window.innerHeight;
+	var grid = new Grid();
 
 	var blackFont = new ig.Font( 'media/fonts/black.font.png' );
 
@@ -19,21 +20,33 @@ ig.module(
 
 		init: function() {
 
-			var grid = new Grid();
+			ig.input.bind( ig.KEY.MOUSE1, 'select' );
+
 			grid.tileSize = 50;
 			grid.tileSpacing = 2;
 			grid.pointyTiles = false;
 			grid.withOrigin  = true;
 
-			var coordinates = grid.hexagonCoordinates(0, 0, 5)
+			var coordinates = grid.hexagonCoordinates(0, 0, 1)
 
 			this.loadLevel( LevelGameLevel );
+
+			this.spawnEntity(EntityPlayer, 0, 0);
 
 			for (var i = 0; i < coordinates.length; i++) {
 				var q = coordinates[i].q;
 				var r = coordinates[i].r;
 				var center = grid.getCenterXY(q, r);
-				this.spawnEntity(EntityHex, center.x + WIDTH / 2, center.y + height / 2, {radius: grid.tileSize});
+				this.spawnEntity(
+					EntityHex,
+					center.x + WIDTH / 2,
+					center.y + HEIGHT / 2,
+					{
+						radius: grid.tileSize,
+						q: q,
+						r: r
+					}
+				);
 			}
 
 		},
@@ -46,6 +59,21 @@ ig.module(
 		draw: function() {
 
 			this.parent();
+		},
+
+		getHexByPixel: function (x, y) {
+			var hex = grid.pixelToAxial(x - WIDTH / 2, y - HEIGHT / 2);
+			return this.getHexByCord(hex.q, hex.r);
+		},
+
+		getHexByCord: function(q, r) {
+			var hexes =  this.getEntitiesByType(EntityHex);
+			for (var i = 0; i < hexes.length; i++) {
+				if (hexes[i].q === q && hexes[i].r === r) {
+					return hexes[i];
+				}
+			}
+			return false;
 		}
 	});
 
@@ -107,6 +135,6 @@ ig.module(
 	}, false);
 
 	var width = WIDTH * scale, height = HEIGHT * scale;
-	ig.main( '#canvas', TITLE, 60, width, height, 1, ig.ImpactSplashLoader );
+	ig.main( '#canvas', GAME, 60, width, height, 1, ig.ImpactSplashLoader );
 
 });

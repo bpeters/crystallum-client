@@ -11,6 +11,9 @@ ig.module(
 
 	EntityPlayer = ig.Entity.extend({
 
+		selectedHex: null,
+		prevHex: null,
+
 		init: function( x, y, settings ) {
 			this.parent( x, y, settings );
 
@@ -19,7 +22,17 @@ ig.module(
 
 		update: function() {
 
+			if( ig.input.pressed('select')) {
+				var hex = ig.game.getHexByPixel(ig.input.mouse.x, ig.input.mouse.y);
+				hex.selected = !hex.selected;
+			}
+
 			this.parent();
+		},
+
+		draw: function() {
+			this.parent();
+
 		}
 
 	});
