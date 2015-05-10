@@ -22352,6 +22352,7 @@ if (typeof window !== 'undefined') {
 			params: props.params
 		}), document);
 	};
+	window.params = props.params;
 }
 
 },{"./App.jsx":179,"react/addons":6}],181:[function(require,module,exports){

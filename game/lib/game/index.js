@@ -14,6 +14,8 @@ ig.module(
 	var HEIGHT = window.innerHeight;
 	var grid = new Grid();
 
+	var GAME_DATA = window.params.gameData;
+
 	var blackFont = new ig.Font( 'media/fonts/black.font.png' );
 
 	GAME = ig.Game.extend({
@@ -21,26 +23,33 @@ ig.module(
 		init: function() {
 
 			ig.input.bind( ig.KEY.MOUSE1, 'select' );
+			ig.input.bind( ig.KEY.LEFT_ARROW, 'left' );
+			ig.input.bind( ig.KEY.UP_ARROW, 'up' );
+			ig.input.bind( ig.KEY.RIGHT_ARROW, 'right' );
+			ig.input.bind( ig.KEY.DOWN_ARROW, 'down' );
 
 			grid.tileSize = 50;
 			grid.tileSpacing = 2;
 			grid.pointyTiles = false;
 			grid.withOrigin  = true;
 
-			var coordinates = grid.hexagonCoordinates(0, 0, 1)
+			var coordinates = grid.hexagonCoordinates(0, 0, 5);
+
+			console.log(GAME_DATA);
+			var tiles = GAME_DATA.tiles;
 
 			this.loadLevel( LevelGameLevel );
 
 			this.spawnEntity(EntityPlayer, 0, 0);
 
-			for (var i = 0; i < coordinates.length; i++) {
-				var q = coordinates[i].q;
-				var r = coordinates[i].r;
+			for (var i = 0; i < tiles.length; i++) {
+				var q = tiles[i].q;
+				var r = tiles[i].r;
 				var center = grid.getCenterXY(q, r);
 				this.spawnEntity(
 					EntityHex,
-					center.x + WIDTH / 2,
-					center.y + HEIGHT / 2,
+					center.x + this.screen.x,
+					center.y + this.screen.y,
 					{
 						radius: grid.tileSize,
 						q: q,
@@ -53,6 +62,12 @@ ig.module(
 
 		update: function() {
 
+			var player = this.getEntitiesByType(EntityPlayer)[0];
+			if (player) {
+				this.screen.x = player.pos.x - ig.system.width / 2;
+				this.screen.y = player.pos.y - ig.system.height / 2;
+			}
+
 			this.parent();
 		},
 
@@ -62,7 +77,7 @@ ig.module(
 		},
 
 		getHexByPixel: function (x, y) {
-			var hex = grid.pixelToAxial(x - WIDTH / 2, y - HEIGHT / 2);
+			var hex = grid.pixelToAxial(x, y);
 			return this.getHexByCord(hex.q, hex.r);
 		},
 

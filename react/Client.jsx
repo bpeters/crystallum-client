@@ -12,4 +12,5 @@ if (typeof window !== 'undefined') {
 			params: props.params
 		}), document);
 	};
+	window.params = props.params;
 }

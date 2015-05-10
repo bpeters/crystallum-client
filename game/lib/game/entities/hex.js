@@ -6,9 +6,6 @@ ig.module(
 )
 .defines(function(){
 
-	var WIDTH = window.innerWidth;
-	var HEIGHT = window.innerHeight;
-
 	EntityHex = ig.Entity.extend({
 
 		sides: 6,
@@ -32,7 +29,7 @@ ig.module(
 		draw: function() {
 			this.parent();
 
-			var sides = this.sides, x = this.pos.x, y = this.pos.y, radius = this.radius;
+			var sides = this.sides, x = this.pos.x + ig.game.screen.x, y = this.pos.y + ig.game.screen.y, radius = this.radius;
 			ig.system.context.save();
 
 			if (this.selected) {
